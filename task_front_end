@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Selection and Twitter Share</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        #parent {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+
+        #child1, #child2 {
+            margin-bottom: 20px;
+        }
+
+        #shareButton {
+            display: none;
+            position: absolute;
+            background-color: #00aced;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="parent">
+    <div id="child1">bla bla</div>
+    <div id="child2">fooobar fo foo foo fooooo</div>
+</div>
+
+<button id="shareButton">Share on Twitter</button>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(function () {
+        $(document.body).bind('mouseup', function (e) {
+            var selection;
+
+            if (window.getSelection) {
+                selection = window.getSelection();
+            } else if (document.selection) {
+                selection = document.selection.createRange();
+            }
+
+            var selectedText = selection.toString().trim();
+
+            if (selectedText !== '') {
+                var shareButton = $('#shareButton');
+                var offset = {
+                    top: e.pageY,
+                    left: e.pageX
+                };
+
+                // Position the share button next to the selected text
+                shareButton.css(offset);
+
+                // Show the share button
+                shareButton.show();
+
+                // Handle click on the share button (redirect to Twitter)
+                shareButton.off('click').on('click', function () {
+                    // Replace the window.location.href with the Twitter sharing URL
+                    window.location.href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(selectedText);
+                });
+            } else {
+                // Hide the share button if no text is selected
+                $('#shareButton').hide();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
+
+
